@@ -1,0 +1,24 @@
+{
+      "mappings": {
+        "dynamic": "strict",
+        "properties": {
+            "text": {
+                "type":"text"
+                },
+            "id_str": {
+               "type":"keyword"
+               },
+            "timestamp_ms": {
+                "type": "date",
+                "format": "epoch_millis"
+                },
+            "coordinates": {
+                "type": "geo_point"
+                }
+          }
+      },
+      "settings": {
+        "number_of_replicas": {{NumberOfReplicas}},
+        "number_of_shards": {{NumberOfShards}}
+      }
+}
