@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from service import insert_service
+from service import indexing
 
 app = FastAPI()
 
-app.include_router(router=insert_service.router)
+app.include_router(router=indexing.router)
