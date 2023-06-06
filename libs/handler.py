@@ -1,12 +1,11 @@
 import json
 
-from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
 from db_client.client_elasticsearch import ClientES
 from confing.configDB import Config
 from exception.ES_exception import IndexExists
-from rendering.render_mapping import read_file, render_mapping
+from rendering.render_mapping import render_mapping
 
 config = Config()
 
@@ -39,7 +38,14 @@ def stream(path: str, index_name: str):
             continue
 
 
-class OperationES:
+class CIOperationES:
+    """
+    This class for create index and index
+    document in the index of elasticsearch
+
+
+    """
+
     def __init__(self, es: ClientES):
         self.client = es
 
@@ -70,8 +76,3 @@ class OperationES:
             index = client.indices.create(index=index_name, mappings=mapping)
 
             return index
-
-    def get_tweet(self, index_name: str):
-        client = self.client.get_client()
-        res = client.get(index=index_name, id='1587232917977079808')
-        return res
