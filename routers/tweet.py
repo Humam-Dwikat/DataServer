@@ -4,7 +4,7 @@ from db_client.client_elasticsearch import ClientES
 from repo.repos import Repo
 from service.tweet import TweetOperation
 
-router = APIRouter(prefix='/v1/insert')
+router = APIRouter(prefix='/v1/get')
 
 es = ClientES()
 repo = Repo(es=es)
