@@ -7,3 +7,4 @@ class ClientES:
 
     def get_client(self) -> Elasticsearch:
         return Elasticsearch(self.db_host)
+

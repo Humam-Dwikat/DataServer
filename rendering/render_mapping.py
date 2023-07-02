@@ -51,3 +51,8 @@ def render_mapping(path: str,
         return mapping
     except json.JSONDecodeError as error:
         raise error
+
+
+if __name__ == '__main__':
+    print(
+        render_mapping('/home/humam/SimulateServer/migration/index_001.tmpl', number_of_replicas=0, number_of_shards=1))
