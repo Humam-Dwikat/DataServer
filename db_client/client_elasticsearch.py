@@ -1,4 +1,4 @@
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, AsyncElasticsearch
 
 
 class ClientES:
@@ -7,4 +7,7 @@ class ClientES:
 
     def get_client(self) -> Elasticsearch:
         return Elasticsearch(self.db_host)
+
+    def get_async_client(self) -> AsyncElasticsearch:
+        return AsyncElasticsearch(self.db_host)
 
