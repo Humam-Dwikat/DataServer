@@ -9,4 +9,7 @@ class TweetOperation:
         self.repo = repo
 
     def get_tweet(self, index_name: str):
+        """
+        Get tweet from index
+        """
         return self.repo.get_tweet(index_name=index_name)
