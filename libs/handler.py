@@ -7,30 +7,27 @@ from confing.configDB import Config
 from exception.ES_exception import IndexExists
 from rendering.render_mapping import render_mapping
 
-config = Config.instance()
+config = Config.get_instance()
 
 
 def read_file_line_by_line(path: str):
-    try:
-        with open(path, 'r', encoding='utf-8') as file:
-            content = file
-            for line in content:
-                try:
-                    line = json.loads(line)
-                    yield line
-                except Exception:
-                    continue
-    except OSError as error:
-        raise error
+    with open(path, 'r', encoding='utf-8') as file:
+        for line in file:
+            try:
+                line = json.loads(line)
+                yield line
+            except Exception as err:
+                print(err)
+                continue
 
 
 def stream(path: str, index_name: str):
-    # content = read_file_line_by_line(path=path)
     for line in read_file_line_by_line(path):
         parse_tweet = json.dumps(line)
+        # object1 = dict(line)
         try:
-            yield {"index": {"_id": line["id_str"]},
-                   "_index": index_name,
+            yield {"_index": index_name,
+                   "_id": line["id_str"],
                    "_source": parse_tweet
                    }
         except Exception:
@@ -48,14 +45,16 @@ class CIOperationES:
     def __init__(self, es: ClientES):
         self.client = es
 
-    def index_document(self, index_name: str, path_file: str = "/home/humam/Downloads/20221101000000.json"):
+    def index_document(
+            self,
+            index_name: str,
+            path_file: str = "/home/humam/Downloads/20221101000000.json"):
         """
         index the document in elasticsearch
         """
         client = self.client.get_client()
         data = stream(index_name=index_name, path=path_file)
-
-        response = bulk(client=client, actions=data)
+        response = bulk(client=client, actions=data, ignore_status=400)
         return response
 
     def create_index(self,

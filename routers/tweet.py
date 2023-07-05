@@ -12,6 +12,6 @@ client = TweetOperation(repo)
 
 
 @router.get('/alltweets')
-def get_tweet():
-    res = client.get_tweet(index_name='index1')
+async def get_tweet():
+    res = await client.get_tweet(index_name='index1')
     return res

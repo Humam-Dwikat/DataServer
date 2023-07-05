@@ -1,5 +1,3 @@
-from elasticsearch import helpers
-
 from db_client.client_elasticsearch import ClientES
 
 
@@ -11,7 +9,7 @@ class Repo:
     def __init__(self, es: ClientES):
         self.es = es
 
-    def get_tweet(self, index_name: str):
+    async def get_tweet(self, index_name: str):
         query = {
             "query": {
                 "match_all": {}
@@ -19,7 +17,7 @@ class Repo:
             "size": 20,
             "from": 0
         }
-        client = self.es.get_client()
-        res = client.search(index=index_name, body=query)
+        client = self.es.get_async_client()
+        res = await client.search(index=index_name, body=query)
 
         return res

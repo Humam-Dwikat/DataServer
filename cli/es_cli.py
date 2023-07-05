@@ -27,8 +27,11 @@ def create_index(shards: int, replicas: int, index: str):
 @click.command()
 @click.option('--index', '-i', help=' name of index')
 def index_document(index: str):
-    client.index_document(index_name=index)
-    click.echo('document indexed')
+    try:
+        client.index_document(index_name=index)
+        # click.echo('document indexed')
+    except Exception as error:
+        print(error)
 
 
 cli.add_command(create_index)
