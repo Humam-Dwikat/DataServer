@@ -11,6 +11,9 @@ config = Config.get_instance()
 
 
 def read_file_line_by_line(path: str):
+    """
+    read specific file as line by line
+    """
     with open(path, 'r', encoding='utf-8') as file:
         for line in file:
             try:
@@ -22,11 +25,15 @@ def read_file_line_by_line(path: str):
 
 
 def stream(path: str, index_name: str):
+    """
+    prepare the action to insert in the bulk
+    """
     for line in read_file_line_by_line(path):
         parse_tweet = json.dumps(line)
         # object1 = dict(line)
         try:
-            yield {"_index": index_name,
+            yield {'_op_type': 'index',
+                   "_index": index_name,
                    "_id": line["id_str"],
                    "_source": parse_tweet
                    }
@@ -54,7 +61,8 @@ class CIOperationES:
         """
         client = self.client.get_client()
         data = stream(index_name=index_name, path=path_file)
-        response = bulk(client=client, actions=data, ignore_status=400)
+        client.indices.put_settings(index=index_name, body={'index.mapping.total_fields.limit': 10000})
+        response = bulk(client=client, actions=data)
         return response
 
     def create_index(self,
@@ -62,6 +70,9 @@ class CIOperationES:
                      number_of_shards: int,
                      number_of_replicas: int,
                      path: str = '/home/humam/SimulateServer/migration/index_001.tmpl'):
+        """
+        Create an index in elasticsearch with the specific mapping
+        """
 
         client = self.client.get_client()
         if client.indices.exists(index=index_name):
