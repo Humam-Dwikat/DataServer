@@ -61,8 +61,7 @@ class CIOperationES:
         """
         client = self.client.get_client()
         data = stream(index_name=index_name, path=path_file)
-        client.indices.put_settings(index=index_name, body={'index.mapping.total_fields.limit': 10000})
-        response = bulk(client=client, actions=data)
+        response = bulk(client=client, actions=data, ignore_status=400)
         return response
 
     def create_index(self,
